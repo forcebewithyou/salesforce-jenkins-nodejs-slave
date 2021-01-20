@@ -1,0 +1,25 @@
+FROM image-registry.openshift-image-registry.svc:5000/salesforce-ci/ose-jenkins-agent-nodejs-12-rhel8
+
+USER root
+
+ENV NODEJS_VERSION=14 \
+    NPM_CONFIG_PREFIX=$HOME/.npm-global \
+    PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Install NodeJS
+RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
+    yum module enable -y nodejs:${NODEJS_VERSION} && \
+    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum clean all -y
+
+RUN node -v
+RUN npm -v
+
+RUN npm install -g sfdx-cli
+
+RUN sfdx --version
+
+USER 1001
