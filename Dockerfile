@@ -1,6 +1,6 @@
 FROM image-registry.openshift-image-registry.svc:5000/salesforce-ci/ose-jenkins-agent-nodejs-12-rhel8
 
-USER root
+# USER root
 
 # ENV NODEJS_VERSION=14 \
 #     NPM_CONFIG_PREFIX=$HOME/.npm-global \
@@ -14,9 +14,9 @@ USER root
 #     yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
 #     rpm -V $INSTALL_PKGS && \
 #     yum clean all -y
-RUN mkdir -p /var/lib/jenkins && \
-    chown -R 1001:0 /var/lib/jenkins && \
-    chmod -R g+w /var/lib/jenkins
+# RUN mkdir -p /var/lib/jenkins && \
+#     chown -R 1001:0 /var/lib/jenkins && \
+#     chmod -R g+w /var/lib/jenkins
 
 RUN node -v
 RUN npm -v
@@ -26,10 +26,10 @@ RUN npm install -g sfdx-cli
 RUN sfdx --version
 
 # Copy the entrypoint
-COPY configuration/* /var/lib/jenkins/
+# COPY configuration/* /var/lib/jenkins/
 
-USER 1001
+# USER 1001
 
 # Run the JNLP client by default
 # To use swarm client, specify "/var/lib/jenkins/run-swarm-client" as Command
-ENTRYPOINT ["/var/lib/jenkins/run-jnlp-client"]
+# ENTRYPOINT ["/var/lib/jenkins/run-jnlp-client"]
