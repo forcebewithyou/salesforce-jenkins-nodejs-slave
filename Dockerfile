@@ -14,6 +14,9 @@ USER root
 #     yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
 #     rpm -V $INSTALL_PKGS && \
 #     yum clean all -y
+RUN mkdir -p /var/lib/jenkins && \
+    chown -R 1001:0 /var/lib/jenkins && \
+    chmod -R g+w /var/lib/jenkins
 
 RUN node -v
 RUN npm -v
