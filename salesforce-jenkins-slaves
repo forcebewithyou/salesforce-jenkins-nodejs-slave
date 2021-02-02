@@ -17,21 +17,21 @@ objects:
       slave-label: ${SLAVE_LABEL}
     labels:
       role: jenkins-nodejs-slave
-    name: ${SLAVE_LABEL}-jenkins-slave
+    name: jenkins-slave-${SLAVE_LABEL}:latest
   spec: {}
 - apiVersion: v1
   kind: BuildConfig
   metadata:
     annotations:
-      description: Modifies the ${IMAGE_NAME} to run as Jenkins slave
+      description: Modifies the ${IMAGE_PATH} to run as Jenkins slave
     labels:
       name: ${SLAVE_LABEL}-slave
-    name: ${SLAVE_LABEL}-jenkins-slave
+    name: jenkins-slave-${SLAVE_LABEL}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: ${SLAVE_LABEL}-jenkins-slave:latest
+        name: jenkins-slave-${SLAVE_LABEL}:latest
     resources: {}
     source:
       contextDir: ${SLAVE_REPO_CONTEXTDIR}
@@ -42,17 +42,17 @@ objects:
     strategy:
       dockerStrategy:
         from:
-          kind: ImageStreamTag
-          name: ${IMAGE_NAME}
-          namespace: ${NAMESPACE}
+          kind: DockerImage
+          name: ${IMAGE_PATH}
+      type: Docker
     triggers:
     - type: ConfigChange
 parameters:
 - description: The name of an image to convert to a Jenkins slave image.
   displayName: Image Name
-  name: IMAGE_NAME
+  name: IMAGE_PATH
   required: true
-  value: ose-jenkins-agent-nodejs-12-rhel8:latest
+  value: quay.io/openshift/origin-jenkins-agent-nodejs
 - description: Label for slave pods which are used by Jenkins to discover slave pods and assign jobs to them
   displayName: Jenkins Slave Label
   name: SLAVE_LABEL
@@ -69,8 +69,8 @@ parameters:
 - description: The git ref or tag to use for customization.
   displayName: Git Reference
   name: SLAVE_REPO_REF
-  value: master
+  value: openshift3
 - description: The OpenShift Namespace ImageStream resides.
   displayName: Jenkins ImageStream Namespace
   name: NAMESPACE
-  value: salesforce-ci
+  value: salesforce-dev
