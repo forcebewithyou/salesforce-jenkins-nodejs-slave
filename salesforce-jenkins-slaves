@@ -17,7 +17,7 @@ objects:
       slave-label: ${SLAVE_LABEL}
     labels:
       role: jenkins-nodejs-slave
-    name: jenkins-slave-${SLAVE_LABEL}:latest
+    name: jenkins-slave-${SLAVE_LABEL}
   spec: {}
 - apiVersion: v1
   kind: BuildConfig
@@ -32,7 +32,13 @@ objects:
       to:
         kind: ImageStreamTag
         name: jenkins-slave-${SLAVE_LABEL}:latest
-    resources: {}
+    resources:
+      limits:
+        cpu: '1'
+        memory: 512Mi
+      requests:
+        cpu: '1'
+        memory: 512Mi
     source:
       contextDir: ${SLAVE_REPO_CONTEXTDIR}
       git:
